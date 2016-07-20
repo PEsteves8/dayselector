@@ -16,7 +16,6 @@ import * as moment from 'moment';
   template: `
     <datepicker-inner [(activeDate)]="activeDate"
                       (update)="onUpdate($event)"
-                      (updateByWeek)="onUpdateByWeek($event)"
                       [datepickerMode]="datepickerMode"
                       [initDate]="initDate"
                       [minDate]="minDate"
@@ -75,10 +74,6 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   @Input() public singleDateSelection: boolean;
  
-  refresh() {    
-    this.currentActiveDateChange.emit(this.activeDate);    
-  }
-
   @Input() public rangeMode: { active: boolean, dates: Array<any>, timer: number };
   @Output() public rangeModeChange: EventEmitter<Object> = new EventEmitter();
 
@@ -98,7 +93,6 @@ export class DatePickerComponent implements ControlValueAccessor {
 
 
   public constructor( @Self() selectedDates: NgModel) {
- 
 
     this.selectedDates = selectedDates;
     // hack
@@ -108,8 +102,11 @@ export class DatePickerComponent implements ControlValueAccessor {
   public set activeDate(value: Date) {
     this._activeDate = value;
   }
-
-
+  
+  refresh() {    
+    this.currentActiveDateChange.emit(this.activeDate);    
+  }
+  
   public onUpdate(event: any): void {
 
     let dates = this.selectedDates.model;

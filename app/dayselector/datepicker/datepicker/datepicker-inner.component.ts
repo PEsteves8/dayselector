@@ -3,6 +3,7 @@ import {CORE_DIRECTIVES, NgClass} from '@angular/common';
 import {FORM_DIRECTIVES, NgModel} from '@angular/forms';
 import {DateFormatter} from './date-formatter';
 
+
 const FORMAT_DAY = 'DD';
 const FORMAT_MONTH = 'MMMM';
 const FORMAT_YEAR = 'YYYY';
@@ -296,6 +297,7 @@ for (let i = 0; i < this.selectedDates.model.length; i++) {
       //Consider removing refreshView();
       this.refreshView();
     }
+    
   }
 
   public toggleMode(direction:number):void {
