@@ -16,3 +16,7 @@ _temp
 !systemjs.config.js
 !typings/typings.d.ts
 !wallaby.js
+!dist/zone.js
+!dist/reflect.js
+!dist/reflect.js.map
+!dist/app.min.js
