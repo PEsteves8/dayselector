@@ -9,6 +9,7 @@ Day selector for selection of multiple dates with ranges or not and the display 
 [https://pesteves8.github.io/dayselector](https://pesteves8.github.io/dayselector)
 
 # To use this component, use app/dayselector/dayselector.component.ts by cloning or downloading
+## To edit, you should comment the bundle script and uncomments the systemjs scripts
 ## It requires bootstrap3 (and almost 4), momentjs and moment-range
 
 ### Main options

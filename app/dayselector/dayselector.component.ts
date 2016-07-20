@@ -139,14 +139,15 @@ export class DaySelectorComponent implements ControlValueAccessor {
 
   }
 
-  public getActiveDate(i: number) {
-   
-    console.log("GetActiveDate ran");
+  public getActiveDate(i: number) {   
+    
+    //console.log("GetActiveDate ran"); 
     if (typeof (this.activeDates) !== 'undefined') {
       return this.activeDates[i];
-    } else {
+    } else {      
       return new Date();
     }
+    
   }
 
   public refreshCalendars() {

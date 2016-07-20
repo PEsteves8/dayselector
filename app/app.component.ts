@@ -27,7 +27,7 @@ import * as moment from 'moment';
                   <button (click)="moveMonths1(1)">Next month</button>
                   <h3> Number of Dates picked = {{ selectedDates1.length }} (Selected dates array -Date- length)</h3>
 <hr>
-<h3>2 datepickers with independent controls - Hold the mouse and let go for range mode</h3>
+<h3>2 datepickers with independent controls - Range mode on with mouse hold as well</h3>
     <day-selector [(ngModel)]="selectedDates2"
                   [(currentActiveDate)]="currentActiveDate2" 
                   [independentDatepickers]="true"
@@ -36,7 +36,7 @@ import * as moment from 'moment';
                   </day-selector>
                   <h3> Number of Dates picked = {{ selectedDates2.length }} (Selected dates array -Date- length)</h3>
 <hr>
-                  <h3>5 datepickers, single selection no controls</h3>
+                  <h3>5 datepickers, single selection no individual controls. Only with the buttons below</h3>
 
     <day-selector [(ngModel)]="selectedDates3"
                   [(currentActiveDate)]="currentActiveDate3" 
@@ -49,7 +49,8 @@ import * as moment from 'moment';
                   <button (click)="moveMonths3(1)">Next month</button>
                   <h3> Number of Dates picked = {{ selectedDates3.length }} (Selected dates array -Date- length)</h3>
                   <hr>
-                  <h3>Single datepicker</h3>
+
+                  <h3>Single datepicker with single date selection</h3>
 
                   <day-selector [(ngModel)]="selectedDates4"
                   [(currentActiveDate)]="currentActiveDate4" 
