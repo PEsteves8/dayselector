@@ -90,8 +90,6 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   private update:EventEmitter<Date> = new EventEmitter<Date>(false);
   private updateByWeek:EventEmitter<Date> = new EventEmitter<Date>(false);
 
-
-
   @Input()
   public get activeDate():Date {
     return this._activeDate;
@@ -271,7 +269,7 @@ for (let i = 0; i < this.selectedDates.model.length; i++) {
 
     this.selectedDate = new Date(this.activeDate.valueOf());
     this.update.emit(this.activeDate);
-    
+    this.activeDateChange.emit(this.activeDate);    
     this.refreshView();
   }
 
@@ -295,7 +293,7 @@ for (let i = 0; i < this.selectedDates.model.length; i++) {
       let month = this.activeDate.getMonth() + direction * (expectedStep.months || 0);
       this.activeDate = new Date(year, month, 1);
       this.activeDateChange.emit(this.activeDate);
-      // Consider removing refreshView();
+      //Consider removing refreshView();
       this.refreshView();
     }
   }
@@ -307,7 +305,6 @@ for (let i = 0; i < this.selectedDates.model.length; i++) {
       (this.datepickerMode === this.minMode && direction === -1)) {
       return;
     }
-
     this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) + direction];
     this.refreshView();
   }

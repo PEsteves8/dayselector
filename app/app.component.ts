@@ -15,16 +15,17 @@ import * as moment from 'moment';
                   [numberOfDatepickers]="3"
                   [singleDateSelection]="false"                 
                   [noMainDatepickers]="false"                  
-                  [minDate]="minDate">
+                  [minDate]="minDate"
+                  [maxDate]="maxDate">
                   </day-selector>
-                  <h3> Number of Dates picked = {{ selectedDates1.length }} (Selected dates array -Date- length)</h3>
-
+                  <br>
                   <button (click)="clearDates()">Clear dates</button>
                   <button (click)="goToToday()">Go to today</button>
                   <button (click)="goTo21052017()">Go to 2017/05/21</button>
                   <button (click)="setMaxDate28052017()">Set max date at 2017/05/28</button>
                   <button (click)="moveMonths1(-1)">Previous month</button>
                   <button (click)="moveMonths1(1)">Next month</button>
+                  <h3> Number of Dates picked = {{ selectedDates1.length }} (Selected dates array -Date- length)</h3>
 <hr>
 <h3>2 datepickers with independent controls - Hold the mouse and let go for range mode</h3>
     <day-selector [selectedDates]="selectedDates2"
@@ -44,10 +45,9 @@ import * as moment from 'moment';
                   [noMainDatepickers]="true"
                   [singleDateSelection]="true">
                   </day-selector>
-                  <h3> Number of Dates picked = {{ selectedDates3.length }} (Selected dates array -Date- length)</h3>
                   <button (click)="moveMonths3(-1)">Previous month</button>
                   <button (click)="moveMonths3(1)">Next month</button>
-
+                  <h3> Number of Dates picked = {{ selectedDates3.length }} (Selected dates array -Date- length)</h3>
                   <hr>
                   <h3>Single datepicker</h3>
 
@@ -56,10 +56,7 @@ import * as moment from 'moment';
                   [numberOfDatepickers]="1"
                   [singleDateSelection]="true">
                   </day-selector>
-                  <h3> Number of Dates picked = {{ selectedDates4.length }} (Selected dates array -Date- length)</h3>
-
-
-    
+                  <h3> Number of Dates picked = {{ selectedDates4.length }} (Selected dates array -Date- length)</h3>   
     
     `,
     directives: [DaySelectorComponent]

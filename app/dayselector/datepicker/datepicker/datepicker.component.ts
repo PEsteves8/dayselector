@@ -38,10 +38,7 @@ import * as moment from 'moment';
                       [onlyCurrentMonth]="onlyCurrentMonth"
                       [shortcutPropagation]="shortcutPropagation"
                       [selectedDates]="selectedDates"
-                      (click)="mainCalendar && refresh()"
-                      
-                      
-                      >
+                      (click)="mainCalendar && refresh()">
       <daypicker [singleDateSelection]="singleDateSelection" [mainCalendar]="mainCalendar" [(rangeMode)]="rangeMode" tabindex="0"></daypicker>
       <monthpicker tabindex="0"></monthpicker>
       <yearpicker tabindex="0"></yearpicker>
@@ -77,26 +74,15 @@ export class DatePickerComponent implements ControlValueAccessor {
   @Output() public currentActiveDateChange: any = new EventEmitter();
 
   @Input() public singleDateSelection: boolean;
-
-
-  refresh() {
-    
-    this.currentActiveDateChange.emit(this.activeDate);
-    
-    //this.activeDateChange.emit(this.activeDate);
-    
+ 
+  refresh() {    
+    this.currentActiveDateChange.emit(this.activeDate);    
   }
 
-  ngOnChanges() {
-    //this.activeDateChange.emit(this.activeDate);
-    
-  }
   @Input() public rangeMode: { active: boolean, dates: Array<any>, timer: number };
   @Output() public rangeModeChange: EventEmitter<Object> = new EventEmitter();
 
   @Input() public mainCalendar: boolean;
-
-  @Output() activeDateChange: EventEmitter<any> = new EventEmitter();
 
   public onChange: any = Function.prototype;
   public onTouched: any = Function.prototype;
@@ -112,6 +98,7 @@ export class DatePickerComponent implements ControlValueAccessor {
 
 
   public constructor( @Self() selectedDates: NgModel) {
+ 
 
     this.selectedDates = selectedDates;
     // hack
@@ -183,24 +170,7 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   // todo: support null value
   public writeValue(value: any): void {
-    // todo: fix something sends here new date all the time
-    // if (value) {
-    //  if (typeof value !== 'Date') {
-    //    value = new Date(value);
-    //  }
-    //
-    //  this.activeDate = value;
-    // }
-
-    if (value === this._activeDate) {
-      return;
-    }
-    if (value && value instanceof Date) {
-      this.activeDate = value;
-      //this.currentActiveDateChange.emit(value);
-      return;
-    }
-    this.activeDate = value ? new Date(value) : void 0;
+  
   }
 
   public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }

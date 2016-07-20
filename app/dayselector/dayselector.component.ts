@@ -130,6 +130,7 @@ export class DaySelectorComponent {
   }
 
   public getActiveDate(i: number) {
+    console.log("GetActiveDate ran");
     if (typeof (this.activeDates) !== 'undefined') {
       return this.activeDates[i];
     } else {
@@ -157,7 +158,6 @@ export class DaySelectorComponent {
   }
 
   ngAfterViewInit() {
-
     this.activeDates = Array(this.numberOfDatepickers).fill(new Date());
     // Init active dates for each datepicker
     if (this.independentDatepickers === true) {
@@ -168,6 +168,7 @@ export class DaySelectorComponent {
       this.refreshCalendars();
     }
   }
+  
   ngAfterContentInit() {
     if (typeof (this.currentActiveDate) === 'undefined') {
       this.currentActiveDate = new Date();
