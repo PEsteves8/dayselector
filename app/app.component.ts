@@ -9,7 +9,7 @@ import * as moment from 'moment';
 
 <h3>Standard - 3 datepickers - Hold the mouse and let go for range mode </h3>
 <h5>Clicking on the week number selects the week row</h5>
-    <day-selector [selectedDates]="selectedDates1"
+    <day-selector [(ngModel)]="selectedDates1"
                   [(currentActiveDate)]="currentActiveDate1" 
                   [independentDatepickers]="false"
                   [numberOfDatepickers]="3"
@@ -28,7 +28,7 @@ import * as moment from 'moment';
                   <h3> Number of Dates picked = {{ selectedDates1.length }} (Selected dates array -Date- length)</h3>
 <hr>
 <h3>2 datepickers with independent controls - Hold the mouse and let go for range mode</h3>
-    <day-selector [selectedDates]="selectedDates2"
+    <day-selector [(ngModel)]="selectedDates2"
                   [(currentActiveDate)]="currentActiveDate2" 
                   [independentDatepickers]="true"
                   [numberOfDatepickers]="2"
@@ -38,7 +38,7 @@ import * as moment from 'moment';
 <hr>
                   <h3>5 datepickers, single selection no controls</h3>
 
-    <day-selector [selectedDates]="selectedDates3"
+    <day-selector [(ngModel)]="selectedDates3"
                   [(currentActiveDate)]="currentActiveDate3" 
                   [independentDatepickers]="false"
                   [numberOfDatepickers]="5"
@@ -51,7 +51,7 @@ import * as moment from 'moment';
                   <hr>
                   <h3>Single datepicker</h3>
 
-                  <day-selector [selectedDates]="selectedDates4"
+                  <day-selector [(ngModel)]="selectedDates4"
                   [(currentActiveDate)]="currentActiveDate4" 
                   [numberOfDatepickers]="1"
                   [singleDateSelection]="true">
@@ -61,7 +61,12 @@ import * as moment from 'moment';
     `,
     directives: [DaySelectorComponent]
 })
-export class AppComponent { 
+export class AppComponent {
+
+
+    constructor() {    } 
+
+
 
      private clearDates() {
          this.selectedDates1.length = 0;

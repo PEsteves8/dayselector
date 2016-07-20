@@ -69,7 +69,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   // todo: change type during implementation
   @Input() public dateDisabled:any;
   @Input() public initDate:Date;
-  @Input() public selectedDates:NgModel;
+  @Input() public selectedDates: any= [];
 
   public stepDay:any = {};
   public stepMonth:any = {};
@@ -207,9 +207,10 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   }
 
   public isActive(dateObject:any):boolean {
+   
 
-for (let i = 0; i < this.selectedDates.model.length; i++) {
-       if (this.compare(dateObject.date, this.selectedDates.model[i]) === 0) {
+for (let i = 0; i < this.selectedDates.length; i++) {
+       if (this.compare(dateObject.date, this.selectedDates[i]) === 0) {
        this.activeDateId = dateObject.uid
            return true;
         }
@@ -247,6 +248,11 @@ for (let i = 0; i < this.selectedDates.model.length; i++) {
   public fixTimeZone(date:Date):Date {
     let hours = date.getHours();
     return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours === 23 ? hours + 2 : 0);
+  }
+
+  public doToggleMode(date: Date) {
+    this.activeDateChange.emit(date);    
+    this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) - 1];    
   }
 
   public select(date:Date | any): void {

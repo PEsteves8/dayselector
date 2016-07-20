@@ -217,7 +217,7 @@ export class DayPickerComponent implements OnInit {
   
   public updateByWeek = new EventEmitter;
 
-  public constructor(datePicker: DatePickerInnerComponent, private rangeModeService: RangeModeService) {
+  public constructor(datePicker: DatePickerInnerComponent) {
     this.rangeModeChange = new EventEmitter();
     this.datePicker = datePicker;
   }

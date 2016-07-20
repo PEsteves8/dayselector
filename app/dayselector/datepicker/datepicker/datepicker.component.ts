@@ -12,7 +12,7 @@ import * as moment from 'moment';
 
 /* tslint:disable:component-selector-name component-selector-type */
 @Component({
-  selector: 'datepicker[ngModel]',
+  selector: 'datepicker',
   template: `
     <datepicker-inner [(activeDate)]="activeDate"
                       (update)="onUpdate($event)"
@@ -47,7 +47,7 @@ import * as moment from 'moment';
     FORM_DIRECTIVES, CORE_DIRECTIVES]
 })
 /* tslint:enable:component-selector-name component-selector-type */
-export class DatePickerComponent implements ControlValueAccessor {
+export class DatePickerComponent {
   @Input() public datepickerMode: string;
   @Input() public initDate: Date;
   @Input() public minDate: Date;
@@ -82,7 +82,8 @@ export class DatePickerComponent implements ControlValueAccessor {
   public onChange: any = Function.prototype;
   public onTouched: any = Function.prototype;
 
-  public selectedDates: NgModel;
+  @Input() public selectedDates: Array<any> = [];
+  
   private _now: Date = new Date();
   private _activeDate: Date;
 
@@ -92,11 +93,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   }
 
 
-  public constructor( @Self() selectedDates: NgModel) {
-
-    this.selectedDates = selectedDates;
-    // hack
-    selectedDates.valueAccessor = this;
+  public constructor() {
   }
 
   public set activeDate(value: Date) {
@@ -109,7 +106,7 @@ export class DatePickerComponent implements ControlValueAccessor {
   
   public onUpdate(event: any): void {
 
-    let dates = this.selectedDates.model;
+    let dates = this.selectedDates;
 
     if (Array.isArray(event)) {
       let datesAsString = dates.map((date: any) => { return date.toString() });
@@ -152,7 +149,7 @@ export class DatePickerComponent implements ControlValueAccessor {
           }
         }
       }
-      this.writeValue(event);
+      
       //this.selectedDates.viewToModelUpdate(event);
       // if date is not in selected dates array, include it
       if (!this.singleDateSelection) {
@@ -165,12 +162,4 @@ export class DatePickerComponent implements ControlValueAccessor {
 
   }
 
-  // todo: support null value
-  public writeValue(value: any): void {
-  
-  }
-
-  public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
-
-  public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 }

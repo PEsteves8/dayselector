@@ -1,26 +1,28 @@
-import { Component, OnInit, NgZone, Input, SimpleChanges, EventEmitter, Output  } from '@angular/core';
+import { Component, OnInit, NgZone, Input, SimpleChanges, EventEmitter, Output, Self  } from '@angular/core';
+import {FORM_DIRECTIVES, ControlValueAccessor, NgModel} from '@angular/forms';
+
 import * as moment from 'moment';
 
 import { DATEPICKER_DIRECTIVES } from './datepicker/datepicker';
 
 
 import {CORE_DIRECTIVES} from '@angular/common';
-import {FORM_DIRECTIVES} from '@angular/forms';
+
 
 
 @Component({
-  selector: 'day-selector',
+  selector: 'day-selector[ngModel]',
   directives: [DATEPICKER_DIRECTIVES, CORE_DIRECTIVES, FORM_DIRECTIVES],
   template: `
   <div class="row" style="display:inline-block; min-height:290px;" >
      <div *ngIf="independentDatepickers">
      <datepicker *ngFor="let relativeIndex of numberOfDatepickersAsArray; let i = index"
+     [selectedDates]="selectedDates.model"
                  [mainCalendar]="true"
                  [rangeMode]="rangeMode"
                  [activeDate]="getActiveDate(i)"
                  class="md-col-4"
                  style="display:inline-block;"
-                 [(ngModel)]="selectedDates"
                  [showWeeks]="true"
                  [singleDateSelection]="singleDateSelection"
                  [minDate]="minDate"
@@ -45,13 +47,13 @@ import {FORM_DIRECTIVES} from '@angular/forms';
      </div>
      <div *ngIf="!independentDatepickers">
      <datepicker *ngFor="let relativeIndex of numberOfDatepickersAsArray; let i = index"
+                [selectedDates]="selectedDates.model"
                 [(currentActiveDate)]="currentActiveDate"
                 [mainCalendar]="isMainCalendar(relativeIndex)"
                 [rangeMode]="rangeMode"
                 [activeDate]="getActiveDate(i)"
                 class="md-col-4"
                 style="display:inline-block;"
-                [(ngModel)]="selectedDates"
                 [singleDateSelection]="singleDateSelection"
                 [minDate]="minDate"
                 [maxDate]="maxDate"
@@ -75,7 +77,7 @@ import {FORM_DIRECTIVES} from '@angular/forms';
      </div>
      `
 })
-export class DaySelectorComponent {
+export class DaySelectorComponent implements ControlValueAccessor {
   @Input() public initDate: Date;
   @Input() public minDate: Date;
   @Input() public maxDate: Date;
@@ -96,6 +98,9 @@ export class DaySelectorComponent {
   // todo: change type during implementation
   @Input() public dateDisabled: any;
 
+  public onChange: any = Function.prototype;
+  public onTouched: any = Function.prototype;
+
 
   @Input() public independentDatepickers: boolean = false;
   @Input() public numberOfDatepickers: number = 3; // Default number of date pickers
@@ -113,10 +118,15 @@ export class DaySelectorComponent {
   public formattedDates: Array<Date> = [];
 
 
-  @Input() public selectedDates: Array<any> = [];
+  public selectedDates:NgModel;
   private opened: boolean = false;
   public oldCurrentActiveDate: any = this.currentActiveDate;
-  public constructor(private ref: NgZone) {
+
+  public constructor(@Self() selectedDates: NgModel, private ref: NgZone) {
+
+    this.selectedDates = selectedDates;
+    // hack
+    selectedDates.valueAccessor = this;
 
   }
 
@@ -130,6 +140,7 @@ export class DaySelectorComponent {
   }
 
   public getActiveDate(i: number) {
+   
     console.log("GetActiveDate ran");
     if (typeof (this.activeDates) !== 'undefined') {
       return this.activeDates[i];
@@ -175,7 +186,7 @@ export class DaySelectorComponent {
     }
     // Init date positions
     if (this.singleDateSelection) {
-      this.selectedDates.push(new Date());
+      this.selectedDates.model.push(new Date());
     }
 
 
@@ -184,6 +195,14 @@ export class DaySelectorComponent {
       this.numberOfDatepickersAsArray.push(i - relativeIndex);
     }
   }
+
+  public writeValue(value: any): void {
+  
+  }
+
+  public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn;}
+
+  public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 
 
 }
