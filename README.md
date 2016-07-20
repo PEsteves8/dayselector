@@ -7,6 +7,9 @@ Day selector for selection of multiple dates with ranges or not and the display 
 - By pressing the mouse button slightly longer you activate range mode, which allows you to select an end date
 
 
+# To use this component, use app/dayselector/dayselector.component.ts by cloning or downloading
+## It requires bootstrap3 (and almost 4), momentjs and moment-range
+
 ### Main options
 
 The most common options are:
