@@ -17,9 +17,9 @@ const TEMPLATE_OPTIONS: any = {
     WEEK_ROW: `
         <td *ngIf="datePicker.showWeeks" class="text-xs-center h6"><em>{{ weekNumbers[index] }}</em></td>
         <td *ngFor="let dtz of rowz" class="text-xs-center" role="gridcell" [id]="dtz.uid">
-          <button type="button" style="min-width:100%;" class="btn btn-sm {{dtz.customClass}}"
+          <button type="button" style="min-width:100%;" class="btn btn-{{dateButtonSize}} {{dtz.customClass}}"
                   *ngIf="!(datePicker.onlyCurrentMonth && dtz.secondary)"
-                  [ngClass]="{'btn-secondary': !dtz.selected && !datePicker.isActive(dtz), 'btn-info': dtz.selected, disabled: dtz.disabled, 'isStartRange': dtz.isStartRange. 'isEndRange', rangeMode.active}"
+                  [ngClass]="{'btn-info': datePicker.isActive(dtz), 'btn-secondary': !dtz.selected && !datePicker.isActive(dtz), 'btn-info': dtz.selected, disabled: dtz.disabled, 'isStartRange': dtz.isStartRange. 'isEndRange', rangeMode.active}"
                   [disabled]="dtz.disabled || dtz.secondary" tabindex="-1"
                   (mousedown)="startRangeMode(dtz)" (mouseup)="cancelRangeMode()">
             <span [ngClass]="{'text-muted': dtz.secondary}, 'currentDay': dtz.current}">{{dtz.label}}</span>
@@ -36,7 +36,7 @@ const TEMPLATE_OPTIONS: any = {
     WEEK_ROW: `
         <td *ngIf="datePicker.showWeeks" class="text-center h6"><button (click)="toggleDaysByWeek(rowz)"><em>{{ weekNumbers[index] }}</em></button></td>
         <td *ngFor="let dtz of rowz" class="text-center" role="gridcell" [id]="dtz.uid">
-          <button type="button" style="min-width:100%;" class="btn btn-default btn-sm {{dtz.customClass}}"
+          <button type="button" style="min-width:100%;" class="btn btn-default btn-{{dateButtonSize}} {{dtz.customClass}}"
                   *ngIf="!(datePicker.onlyCurrentMonth && dtz.secondary)"
                   [ngClass]="{'btn-info': datePicker.isActive(dtz), disabled: dtz.disabled, secondary: dtz.secondary, 'isStartRange': checkIsStartRange(dtz), 'isEndRange': rangeMode.active}"
                   [disabled]="dtz.disabled" tabindex="-1" (mousedown)="!dtz.secondary && startRangeMode(dtz)" (mouseup)="cancelRangeMode()">
@@ -150,6 +150,8 @@ export class DayPickerComponent implements OnInit {
 
   @Input() public singleDateSelection: boolean;
 
+  @Input() public dateButtonSize: string;
+
 
   checkIsStartRange(date: any) {
     if (this.rangeMode.dates.length > 0) {
@@ -157,12 +159,16 @@ export class DayPickerComponent implements OnInit {
     }
   }
 
- 
   addIndividualDate(date: any) {
   }
 
   cancelRangeMode() {
     clearTimeout(this.rangeMode.timer);
+  }
+
+  ngDoCheck() {
+    // Update seletedDatesAsTime so that the button can compare it's dates with the current selected dates with datePicker.isActive()
+    this.datePicker.updateSelectedDatesAsTime();
   }
 
   startRangeMode(date: any) {
@@ -180,14 +186,14 @@ export class DayPickerComponent implements OnInit {
           this.rangeMode.active = true;
           date.isStartRange = true;
           this.datePicker.select(date.date);
-          this.rangeMode.dates.push(date); 
+          this.rangeMode.dates.push(date);
           this.rangeModeChange.emit(this.rangeMode);
         }, 300);
       }
     } else {
 
       if (!this.singleDateSelection) {
-        this.rangeMode.dates.push(date);         
+        this.rangeMode.dates.push(date);
         let datesArray: any = [];
 
         // 'moment as any' a simple way to override the issue with moment-range's (which extends moment) typings
@@ -214,7 +220,7 @@ export class DayPickerComponent implements OnInit {
   public rows: Array<any> = [];
   public weekNumbers: Array<number> = [];
   public datePicker: DatePickerInnerComponent;
-  
+
   public updateByWeek = new EventEmitter;
 
   public constructor(datePicker: DatePickerInnerComponent) {

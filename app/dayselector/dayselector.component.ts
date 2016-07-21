@@ -42,7 +42,8 @@ import {CORE_DIRECTIVES} from '@angular/common';
                  [customClass]="customClass"
                  [dateDisabled]="dateDisabled"                 
                  [onlyCurrentMonth]="onlyCurrentMonth"
-                 [shortcutPropagation]="shortcutPropagation"  
+                 [shortcutPropagation]="shortcutPropagation" 
+                 [dateButtonSize]="dateButtonSize" 
                  ></datepicker>
      </div>
      <div *ngIf="!independentDatepickers">
@@ -72,7 +73,8 @@ import {CORE_DIRECTIVES} from '@angular/common';
                 [customClass]="customClass"
                 [dateDisabled]="dateDisabled"                
                 [onlyCurrentMonth]="onlyCurrentMonth"
-                [shortcutPropagation]="shortcutPropagation">
+                [shortcutPropagation]="shortcutPropagation"
+                [dateButtonSize]="dateButtonSize">
                 </datepicker>
      </div>
      `
@@ -98,6 +100,8 @@ export class DaySelectorComponent implements ControlValueAccessor {
   // todo: change type during implementation
   @Input() public dateDisabled: any;
 
+  @Input() public dateButtonSize: string = 'sm';
+
   public onChange: any = Function.prototype;
   public onTouched: any = Function.prototype;
 
@@ -118,11 +122,11 @@ export class DaySelectorComponent implements ControlValueAccessor {
   public formattedDates: Array<Date> = [];
 
 
-  public selectedDates:NgModel;
+  public selectedDates: NgModel;
   private opened: boolean = false;
   public oldCurrentActiveDate: any = this.currentActiveDate;
 
-  public constructor(@Self() selectedDates: NgModel, private ref: NgZone) {
+  public constructor( @Self() selectedDates: NgModel, private ref: NgZone) {
 
     this.selectedDates = selectedDates;
     // hack
@@ -130,7 +134,7 @@ export class DaySelectorComponent implements ControlValueAccessor {
 
   }
 
-  public isMainCalendar(relativeIndex: number): boolean {        
+  public isMainCalendar(relativeIndex: number): boolean {
     if (!this.noMainDatepickers && relativeIndex === 0) {
       return true;
     } else {
@@ -139,15 +143,15 @@ export class DaySelectorComponent implements ControlValueAccessor {
 
   }
 
-  public getActiveDate(i: number) {   
-    
+  public getActiveDate(i: number) {
+
     //console.log("GetActiveDate ran"); 
     if (typeof (this.activeDates) !== 'undefined') {
       return this.activeDates[i];
-    } else {      
+    } else {
       return new Date();
     }
-    
+
   }
 
   public refreshCalendars() {
@@ -180,7 +184,7 @@ export class DaySelectorComponent implements ControlValueAccessor {
       this.refreshCalendars();
     }
   }
-  
+
   ngAfterContentInit() {
     if (typeof (this.currentActiveDate) === 'undefined') {
       this.currentActiveDate = new Date();
@@ -191,17 +195,17 @@ export class DaySelectorComponent implements ControlValueAccessor {
     }
 
 
-    let relativeIndex = Math.ceil(this.numberOfDatepickers / 2) -1;
+    let relativeIndex = Math.ceil(this.numberOfDatepickers / 2) - 1;
     for (let i = 0; i < this.numberOfDatepickers; i++) {
       this.numberOfDatepickersAsArray.push(i - relativeIndex);
     }
   }
 
   public writeValue(value: any): void {
-  
+
   }
 
-  public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn;}
+  public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
 
   public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 

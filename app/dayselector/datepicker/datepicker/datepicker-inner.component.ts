@@ -44,6 +44,7 @@ const SHORTCUT_PROPAGATION = false;
   template: `
     <div *ngIf="datepickerMode" class="well well-sm bg-faded p-a card" role="application" ><!--&lt;!&ndash;ng-keydown="keydown($event)"&ndash;&gt;-->
       <ng-content></ng-content>
+      
     </div>
   `,
   directives: [FORM_DIRECTIVES, CORE_DIRECTIVES, NgClass, NgModel]
@@ -90,6 +91,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   private compareHandlerYear: Function;
   private update: EventEmitter<Date> = new EventEmitter<Date>(false);
   private updateByWeek: EventEmitter<Date> = new EventEmitter<Date>(false);
+  private selectedDatesAsTime: any = [];
 
   @Input()
   public get activeDate(): Date {
@@ -207,14 +209,8 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   }
 
   public isActive(dateObject: any): boolean {
-    for (let i = 0; i < this.selectedDates.length; i++) {
-      if (this.compare(dateObject.date, this.selectedDates[i]) === 0) {
-        this.activeDateId = dateObject.uid
-        return true;
-      }
-    }
-    return false;
 
+    return this.selectedDatesAsTime.indexOf(dateObject.asGetTime) !== -1;
   }
 
   public createDateObject(date: Date, format: string): any {
@@ -225,6 +221,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
     dateObject.disabled = this.isDisabled(date);
     dateObject.current = this.compare(date, new Date()) === 0;
     dateObject.customClass = this.getCustomClassForDate(dateObject.date);
+    dateObject.asGetTime = date.getTime();
 
     return dateObject;
   }
@@ -257,27 +254,35 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
 
     if (Array.isArray(date)) {
       this.update.emit(date);
-      return;
-    }
-
-    if (this.datepickerMode === this.minMode) {
-      if (!this.activeDate) {
-        this.activeDate = new Date(0, 0, 0, 0, 0, 0, 0);
-      }
-
-      this.activeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
     } else {
-      this.activeDate = date;
-      this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) - 1];
+
+      if (this.datepickerMode === this.minMode) {
+        if (!this.activeDate) {
+          this.activeDate = new Date(0, 0, 0, 0, 0, 0, 0);
+        }
+
+        this.activeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+      } else {
+        this.activeDate = date;
+        this.datepickerMode = this.modes[this.modes.indexOf(this.datepickerMode) - 1];
+      }
+
+      this.selectedDate = new Date(this.activeDate.valueOf());
+      this.update.emit(this.activeDate);
+      this.activeDateChange.emit(this.activeDate);
+      this.refreshView();
+
     }
 
-    this.selectedDate = new Date(this.activeDate.valueOf());
-    this.update.emit(this.activeDate);
-    this.activeDateChange.emit(this.activeDate);
-    this.refreshView();
   }
 
+  updateSelectedDatesAsTime() {
+    this.selectedDatesAsTime = this.selectedDates.map((item: any) => {
+      return item.getTime();
+    });
+  }
   public move(direction: number): void {
 
     let expectedStep: any;

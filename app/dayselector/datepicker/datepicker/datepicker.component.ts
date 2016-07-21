@@ -38,7 +38,7 @@ import * as moment from 'moment';
                       [shortcutPropagation]="shortcutPropagation"
                       [selectedDates]="selectedDates"
                       (click)="mainCalendar && refresh()">
-      <daypicker [singleDateSelection]="singleDateSelection" [mainCalendar]="mainCalendar" [(rangeMode)]="rangeMode" tabindex="0"></daypicker>
+      <daypicker [singleDateSelection]="singleDateSelection" [mainCalendar]="mainCalendar" [(rangeMode)]="rangeMode" [dateButtonSize]="dateButtonSize" tabindex="0"></daypicker>
       <monthpicker tabindex="0"></monthpicker>
       <yearpicker tabindex="0"></yearpicker>
     </datepicker-inner>
@@ -68,12 +68,13 @@ export class DatePickerComponent {
   @Input() public customClass: Array<{ date: Date, mode: string, clazz: string }>;
   // todo: change type during implementation
   @Input() public dateDisabled: any;
+  @Input() public dateButtonSize: string;
 
   @Input() public currentActiveDate: any;
   @Output() public currentActiveDateChange: any = new EventEmitter();
 
   @Input() public singleDateSelection: boolean;
- 
+
   @Input() public rangeMode: { active: boolean, dates: Array<any>, timer: number };
   @Output() public rangeModeChange: EventEmitter<Object> = new EventEmitter();
 
@@ -83,7 +84,7 @@ export class DatePickerComponent {
   public onTouched: any = Function.prototype;
 
   @Input() public selectedDates: Array<any> = [];
-  
+
   private _now: Date = new Date();
   private _activeDate: Date;
 
@@ -99,34 +100,34 @@ export class DatePickerComponent {
   public set activeDate(value: Date) {
     this._activeDate = value;
   }
-  
-  refresh() {    
-    this.currentActiveDateChange.emit(this.activeDate);    
+
+  refresh() {
+    this.currentActiveDateChange.emit(this.activeDate);
   }
-  
+
   public onUpdate(event: any): void {
 
     let dates = this.selectedDates;
 
     if (Array.isArray(event)) {
-      let datesAsString = dates.map((date: any) => { return date.toString() });
+      let datesAsTime = dates.map((date: any) => { return date.getTime() });
       let newDates = event.map((item: any) => { return moment(item) });
-      let newDatesAsString = event.map((date: any) => { return date.toString() });
+      let newDatesAsTime = event.map((date: any) => { return date.getTime() });
       let counter: number = 0;
       if (dates.length === 0) {
         event.forEach((item: any) => {
           dates.push(item);
         });
       } else {
-        newDatesAsString.forEach((newDateAsString: any, i: number) => {
-          if (datesAsString.indexOf(newDateAsString) === -1) {
+        newDatesAsTime.forEach((newDateAsTime: any, i: number) => {
+          if (datesAsTime.indexOf(newDateAsTime) === -1) {
             dates.push(newDates[i].toDate());
             counter++;
           }
         });
 
         if (counter === 0) {
-            event.forEach((newDate: any, newDateIndex: number) => {
+          event.forEach((newDate: any, newDateIndex: number) => {
             dates.forEach((date: any, dateIndex: number) => {
               if (moment(newDate).isSame(moment(date))) {
                 dates.splice(dateIndex, 1);
@@ -149,7 +150,7 @@ export class DatePickerComponent {
           }
         }
       }
-      
+
       //this.selectedDates.viewToModelUpdate(event);
       // if date is not in selected dates array, include it
       if (!this.singleDateSelection) {
