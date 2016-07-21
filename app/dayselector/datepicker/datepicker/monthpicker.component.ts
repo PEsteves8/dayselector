@@ -95,10 +95,9 @@ export class MonthPickerComponent implements OnInit {
       self.rows = this.split(months, 3);
     }, 'month');
 
-    this.datePicker.setCompareHandler(function (date1:Date, date2:Date):number {
-      let d1 = new Date(date1.getFullYear(), date1.getMonth());
-      let d2 = new Date(date2.getFullYear(), date2.getMonth());
-      return d1.getTime() - d2.getTime();
+    this.datePicker.setCompareHandler(function (date1:Date, date2:Date):boolean {
+          return date1.getMonth() === date2.getMonth()
+          && date1.getFullYear() === date2.getFullYear();      
     }, 'month');
 
     this.datePicker.refreshView();

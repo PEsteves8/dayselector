@@ -101,8 +101,8 @@ export class YearPickerComponent implements OnInit {
       self.rows = this.split(years, 5);
     }, 'year');
 
-    this.datePicker.setCompareHandler(function (date1:Date, date2:Date):number {
-      return date1.getFullYear() - date2.getFullYear();
+    this.datePicker.setCompareHandler(function (date1:Date, date2:Date):boolean {
+          return date1.getFullYear() === date2.getFullYear();
     }, 'year');
 
     this.datePicker.refreshView();

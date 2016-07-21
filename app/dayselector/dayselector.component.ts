@@ -113,18 +113,18 @@ export class DaySelectorComponent implements ControlValueAccessor {
 
 
   @Input() public currentActiveDate: Date;
-  @Output() public currentActiveDateChange: any = new EventEmitter();
+  @Output() public currentActiveDateChange: EventEmitter<Date> = new EventEmitter();
 
-  public activeDates: Array<any>;
+  public activeDates: Array<Date>;
   public activeDateInited: boolean = false;
   public numberOfDatepickersAsArray: Array<number> = [];
-  public rangeMode: any = { active: false, dates: [], timer: 0 };
+  public rangeMode: Object = { active: false, dates: [], timer: 0 };
   public formattedDates: Array<Date> = [];
 
 
   public selectedDates: NgModel;
   private opened: boolean = false;
-  public oldCurrentActiveDate: any = this.currentActiveDate;
+  public oldCurrentActiveDate: Date = this.currentActiveDate;
 
   public constructor( @Self() selectedDates: NgModel, private ref: NgZone) {
 

@@ -3,6 +3,8 @@ import {CORE_DIRECTIVES, NgClass} from '@angular/common';
 import {FORM_DIRECTIVES, NgModel} from '@angular/forms';
 import {DateFormatter} from './date-formatter';
 
+import * as moment from 'moment';
+
 
 const FORMAT_DAY = 'DD';
 const FORMAT_MONTH = 'MMMM';
@@ -70,7 +72,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   // todo: change type during implementation
   @Input() public dateDisabled: any;
   @Input() public initDate: Date;
-  @Input() public selectedDates: any = [];
+  @Input() public selectedDates: Array<Date> = [];
 
   public stepDay: any = {};
   public stepMonth: any = {};
@@ -91,7 +93,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
   private compareHandlerYear: Function;
   private update: EventEmitter<Date> = new EventEmitter<Date>(false);
   private updateByWeek: EventEmitter<Date> = new EventEmitter<Date>(false);
-  private selectedDatesAsTime: any = [];
+
 
   @Input()
   public get activeDate(): Date {
@@ -156,7 +158,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
     }
   }
 
-  public compare(date1: Date, date2: Date): number {
+  public compare(date1: Date, date2: Date): boolean {
     if (date1 === undefined || date2 === undefined) {
       return undefined;
     }
@@ -210,19 +212,25 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
 
   public isActive(dateObject: any): boolean {
 
-    return this.selectedDatesAsTime.indexOf(dateObject.asGetTime) !== -1;
+    for (let i = 0; i < this.selectedDates.length; i++) {
+      if (this.compare(dateObject.date, this.selectedDates[i])) {
+        this.activeDateId = dateObject.uid
+        return true;
+      }
+    }
+    return false;
+
+
   }
 
   public createDateObject(date: Date, format: string): any {
     let dateObject: any = {};
     dateObject.date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     dateObject.label = this.dateFilter(date, format);
-    dateObject.selected = this.compare(date, this.selectedDate) === 0;
+    dateObject.selected = this.compare(date, this.selectedDate);
     dateObject.disabled = this.isDisabled(date);
-    dateObject.current = this.compare(date, new Date()) === 0;
+    dateObject.current = this.compare(date, new Date());
     dateObject.customClass = this.getCustomClassForDate(dateObject.date);
-    dateObject.asGetTime = date.getTime();
-
     return dateObject;
   }
 
@@ -278,11 +286,6 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
 
   }
 
-  updateSelectedDatesAsTime() {
-    this.selectedDatesAsTime = this.selectedDates.map((item: any) => {
-      return item.getTime();
-    });
-  }
   public move(direction: number): void {
 
     let expectedStep: any;
@@ -335,9 +338,7 @@ export class DatePickerInnerComponent implements OnInit, OnChanges {
 
   private isDisabled(date: Date): boolean {
     // todo: implement dateDisabled attribute
-    return ((this.minDate && this.compare(date, this.minDate) < 0) ||
-      (this.maxDate && this.compare(date, this.maxDate) > 0));
-  }
-
-
+    return ( this.minDate && moment(date).isBefore(moment(this.minDate)) ) ||
+           ( this.maxDate && moment(date).isAfter(moment(this.maxDate)) ) 
+  } 
 }

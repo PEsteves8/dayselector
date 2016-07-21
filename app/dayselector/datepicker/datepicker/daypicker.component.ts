@@ -4,8 +4,6 @@ import {FORM_DIRECTIVES} from '@angular/forms';
 import {Ng2BootstrapConfig, Ng2BootstrapTheme} from '../ng2-bootstrap-config';
 import {DatePickerInnerComponent} from './datepicker-inner.component';
 
-import { RangeModeService } from './rangeMode.service';
-
 import * as moment from 'moment';
 import 'moment-range';
 
@@ -78,6 +76,8 @@ const CURRENT_THEME_TEMPLATE: any = TEMPLATE_OPTIONS[Ng2BootstrapConfig.theme ||
            .secondary {
              color: #A4A4A4;
              background-color: #E6E6E6 !important;
+             cursor: pointer;
+             pointer-events: none;
              }
            .isStartRange{
                color: white;
@@ -92,7 +92,6 @@ const CURRENT_THEME_TEMPLATE: any = TEMPLATE_OPTIONS[Ng2BootstrapConfig.theme ||
 
   selector: 'daypicker',
   events: ['updateByWeek'],
-  providers: [RangeModeService],
   template: `
 <table *ngIf="datePicker.datepickerMode==='day'" role="grid" aria-labelledby="uniqueId+'-title'" aria-activedescendant="activeDateId">
   <thead>
@@ -159,17 +158,11 @@ export class DayPickerComponent implements OnInit {
     }
   }
 
-  addIndividualDate(date: any) {
-  }
 
   cancelRangeMode() {
     clearTimeout(this.rangeMode.timer);
   }
 
-  ngDoCheck() {
-    // Update seletedDatesAsTime so that the button can compare it's dates with the current selected dates with datePicker.isActive()
-    this.datePicker.updateSelectedDatesAsTime();
-  }
 
   startRangeMode(date: any) {
 
@@ -194,7 +187,7 @@ export class DayPickerComponent implements OnInit {
 
       if (!this.singleDateSelection) {
         this.rangeMode.dates.push(date);
-        let datesArray: any = [];
+        let datesArray: Array<Date> = [];
 
         // 'moment as any' a simple way to override the issue with moment-range's (which extends moment) typings
         var range = (moment as any).range(this.rangeMode.dates[0].date, this.rangeMode.dates[1].date);
@@ -277,10 +270,10 @@ export class DayPickerComponent implements OnInit {
       }
     }, 'day');
 
-    this.datePicker.setCompareHandler(function (date1: Date, date2: Date): number {
-      let d1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
-      let d2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-      return d1.getTime() - d2.getTime();
+    this.datePicker.setCompareHandler(function (date1: Date, date2: Date): boolean {
+      return date1.getMonth() === date2.getMonth()
+          && date1.getFullYear() === date2.getFullYear()
+          && date1.getDate() === date2.getDate();     
     }, 'day');
 
     this.datePicker.refreshView();
@@ -311,8 +304,7 @@ export class DayPickerComponent implements OnInit {
     return Math.floor(Math.round((time - checkDate.getTime()) / 86400000) / 7) + 1;
   }
 
-  toggleDaysByWeek(daysOfRow: any) {
-
+  toggleDaysByWeek(daysOfRow: Array<Date>) {
     if (!this.singleDateSelection) {
       let datesOfRow = daysOfRow.map((dateObj: any) => {
         return dateObj.date;

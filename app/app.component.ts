@@ -97,15 +97,15 @@ export class AppComponent {
         this.currentActiveDate3 = moment(this.currentActiveDate3).day(1).add(step, 'month').toDate();
     }
 
-    private currentActiveDate1: any = new Date(); // Set to today or any other date you want to start with
-    private currentActiveDate2: any = new Date(); // Set to today or any other date you want to start with
-    private currentActiveDate3: any = new Date(); // Set to today or any other date you want to start with
-    private currentActiveDate4: any = new Date(); // Set to today or any other date you want to start with
-    private selectedDates1: Array<any> = [];
-    private selectedDates2: Array<any> = [];
-    private selectedDates3: Array<any> = [];
-    private selectedDates4: Array<any> = [];
-    private dateButtonSize1: any = 'xs';
+    private currentActiveDate1: Date = new Date(); // Set to today or any other date you want to start with
+    private currentActiveDate2: Date = new Date(); // Set to today or any other date you want to start with
+    private currentActiveDate3: Date = new Date(); // Set to today or any other date you want to start with
+    private currentActiveDate4: Date = new Date(); // Set to today or any other date you want to start with
+    private selectedDates1: Array<Date> = [];
+    private selectedDates2: Array<Date> = [];
+    private selectedDates3: Array<Date> = [];
+    private selectedDates4: Array<Date> = [];
+    private dateButtonSize1: string = 'xs';
     private maxDate: Date;
     private minDate: Date = new Date(2016, 5, 26); // Months begin at 0, so this translates to May
 
