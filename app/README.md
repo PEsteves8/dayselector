@@ -1,3 +1,6 @@
+ NOTE: This was created because these features were needed for specific project. I haven't tested a lot of stuff related to the previous ng2-bootstrap
+       Also, the code is in need of seeeeerious refactoring. Currently it's somewhat chaotic.
+
 # Usage & Demo
 
 Day selector for selection of multiple dates with ranges or not and the display of multiple datepickers
@@ -24,6 +27,5 @@ The most common options are:
  Other options are available as this is a fork of ng2bootstrap datepicker
  
 
- NOTE: This was created because these features were needed for specific project. I haven't tested a lot of stuff related to the previous ng2-bootstrap
-       Also, the code is in need of seeeeerious refactoring. Currently it's somewhat chaotic.
+
 
